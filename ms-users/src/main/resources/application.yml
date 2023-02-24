@@ -11,3 +11,5 @@ spring:
       ddl-auto: update
       generate-dll: true
       show-sql: true
+server:
+  port: 8081
