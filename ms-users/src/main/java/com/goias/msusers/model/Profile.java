@@ -22,7 +22,7 @@ public class Profile {
     @Column(name = "profile_name")
     private String profileName;
 
-    @OneToMany(mappedBy = "profile")
+    @OneToMany(mappedBy = "profile",fetch = FetchType.EAGER)
     private List<User> users;
 
 }

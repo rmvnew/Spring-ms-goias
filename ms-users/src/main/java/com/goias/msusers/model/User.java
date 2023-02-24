@@ -6,7 +6,6 @@ import lombok.*;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 @ToString
 @Entity
@@ -31,6 +30,10 @@ public class User {
     @JoinColumn(name = "profileId")
     private Profile profile;
 
-
-
+    public User(String userName, String userEmail, String userPassword, Profile profile) {
+        this.userName = userName;
+        this.userEmail = userEmail;
+        this.userPassword = userPassword;
+        this.profile = profile;
+    }
 }
