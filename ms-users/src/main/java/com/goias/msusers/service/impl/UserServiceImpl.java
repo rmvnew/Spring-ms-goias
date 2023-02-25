@@ -6,7 +6,8 @@ import com.goias.msusers.model.User;
 import com.goias.msusers.repository.ProfileRepository;
 import com.goias.msusers.repository.UserRepository;
 import com.goias.msusers.resources.dto.mapper.UserMapper;
-import com.goias.msusers.resources.dto.request.UserRequestDto;
+import com.goias.msusers.resources.dto.request.UserCreateRequestDto;
+import com.goias.msusers.resources.dto.request.UserUpdateRequestDto;
 import com.goias.msusers.resources.dto.response.UserResponseDto;
 import com.goias.msusers.service.UserService;
 import org.mindrot.jbcrypt.BCrypt;
@@ -28,7 +29,7 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
 
     @Override
-    public UserResponseDto save(UserRequestDto requestDto) {
+    public UserResponseDto save(UserCreateRequestDto requestDto) {
 
         var currentPass = BCrypt.hashpw(requestDto.getUserPassword(),BCrypt.gensalt(8));
         var profile = this.profileRepository.findById(requestDto.getProfileId()).get();
@@ -59,7 +60,25 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND)));
     }
 
+    @Override
+    public UserResponseDto updateUser(UserUpdateRequestDto requestDto, Long id) {
 
+        var itsSaved = this.userRepository.findById(id);
+        var profile = this.profileRepository.findById(requestDto.getProfileId()).get();
+
+        if(!itsSaved.isPresent()){
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+        }
+
+        var userSaved = itsSaved.get();
+        userSaved.setUserName(requestDto.getUserName());
+        userSaved.setUserEmail(requestDto.getUserEmail());
+        userSaved.setProfile(profile);
+
+        var saveDone = this.userRepository.save(userSaved);
+
+        return userMapper.toDto(saveDone);
+    }
 
 
 }
