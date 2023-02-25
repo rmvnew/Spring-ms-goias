@@ -41,7 +41,8 @@ public class UserServiceImpl implements UserService {
         User user = new User(
                 requestDto.getUserName().trim().toUpperCase(),
                 requestDto.getUserEmail(),
-                currentPass,profile);
+                currentPass,profile,
+                true);
 
         var saved = this.userRepository.save(user);
 

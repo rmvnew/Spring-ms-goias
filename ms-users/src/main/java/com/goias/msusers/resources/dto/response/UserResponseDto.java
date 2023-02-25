@@ -13,5 +13,7 @@ public class UserResponseDto {
 
     private String userEmail;
 
+    private boolean isActive;
+
     private Profile profile;
 }

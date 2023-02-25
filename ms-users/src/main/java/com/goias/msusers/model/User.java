@@ -33,14 +33,18 @@ public class User implements Serializable {
     @Column(name = "user_password")
     private String userPassword;
 
+    @Column(name = "is_active")
+    private boolean isActive;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "profileId")
     private Profile profile;
 
-    public User(String userName, String userEmail, String userPassword, Profile profile) {
+    public User(String userName, String userEmail, String userPassword, Profile profile,boolean isActive) {
         this.userName = userName;
         this.userEmail = userEmail;
         this.userPassword = userPassword;
         this.profile = profile;
+        this.isActive = isActive;
     }
 }
