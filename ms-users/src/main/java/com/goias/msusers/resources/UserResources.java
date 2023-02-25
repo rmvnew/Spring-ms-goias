@@ -31,4 +31,8 @@ public class UserResources {
        return ResponseEntity.ok(this.userService.getAll(page));
     }
 
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<UserResponseDto> findById(@PathVariable("id") Long id){
+        return ResponseEntity.ok(this.userService.findById(id));
+    }
 }

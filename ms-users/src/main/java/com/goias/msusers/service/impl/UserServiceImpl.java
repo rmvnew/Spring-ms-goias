@@ -1,5 +1,7 @@
 package com.goias.msusers.service.impl;
 
+import com.goias.msusers.enums.ErrorCode;
+import com.goias.msusers.exceptions.CustomException;
 import com.goias.msusers.model.User;
 import com.goias.msusers.repository.ProfileRepository;
 import com.goias.msusers.repository.UserRepository;
@@ -12,9 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -33,6 +32,10 @@ public class UserServiceImpl implements UserService {
 
         var currentPass = BCrypt.hashpw(requestDto.getUserPassword(),BCrypt.gensalt(8));
         var profile = this.profileRepository.findById(requestDto.getProfileId()).get();
+        var isRegistered = this.userRepository.findByUserName(requestDto.getUserName().toUpperCase());
+        if(isRegistered.isPresent()){
+            throw new CustomException(ErrorCode.USER_ALREADY_REGISTERED);
+        }
 
         User user = new User(
                 requestDto.getUserName().trim().toUpperCase(),
@@ -49,4 +52,14 @@ public class UserServiceImpl implements UserService {
         return this.userRepository.findAll(page).map(userMapper::toDto);
 
     }
+
+    @Override
+    public UserResponseDto findById(Long id) {
+        return userMapper.toDto(this.userRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND)));
+    }
+
+
+
+
 }
