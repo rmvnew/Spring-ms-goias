@@ -43,4 +43,9 @@ public class UserResources {
             @RequestBody UserUpdateRequestDto requestDto) {
         return ResponseEntity.ok(this.userService.updateUser(requestDto, id));
     }
+
+    @PatchMapping("/change-status/{id}")
+    public ResponseEntity<UserResponseDto> changeStatus(@PathVariable("id") Long id){
+        return ResponseEntity.ok(this.userService.changeStatus(id));
+    }
 }

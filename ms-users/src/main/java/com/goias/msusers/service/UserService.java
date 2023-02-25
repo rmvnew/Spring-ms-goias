@@ -16,6 +16,8 @@ public interface UserService {
 
     UserResponseDto updateUser(UserUpdateRequestDto requestDto, Long id);
 
+    UserResponseDto changeStatus(Long id);
+
 
 
 }

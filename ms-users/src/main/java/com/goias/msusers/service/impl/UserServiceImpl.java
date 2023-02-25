@@ -31,17 +31,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDto save(UserCreateRequestDto requestDto) {
 
-        var currentPass = BCrypt.hashpw(requestDto.getUserPassword(),BCrypt.gensalt(8));
+        var currentPass = BCrypt.hashpw(requestDto.getUserPassword(), BCrypt.gensalt(8));
         var profile = this.profileRepository.findById(requestDto.getProfileId()).get();
         var isRegistered = this.userRepository.findByUserName(requestDto.getUserName().toUpperCase());
-        if(isRegistered.isPresent()){
+        if (isRegistered.isPresent()) {
             throw new CustomException(ErrorCode.USER_ALREADY_REGISTERED);
         }
 
         User user = new User(
                 requestDto.getUserName().trim().toUpperCase(),
                 requestDto.getUserEmail(),
-                currentPass,profile,
+                currentPass, profile,
                 true);
 
         var saved = this.userRepository.save(user);
@@ -67,7 +67,7 @@ public class UserServiceImpl implements UserService {
         var itsSaved = this.userRepository.findById(id);
         var profile = this.profileRepository.findById(requestDto.getProfileId()).get();
 
-        if(!itsSaved.isPresent()){
+        if (itsSaved.isEmpty()) {
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
         }
 
@@ -79,6 +79,24 @@ public class UserServiceImpl implements UserService {
         var saveDone = this.userRepository.save(userSaved);
 
         return userMapper.toDto(saveDone);
+    }
+
+    @Override
+    public UserResponseDto changeStatus(Long id) {
+
+        var itsSaved = this.userRepository.findById(id);
+
+        if (itsSaved.isEmpty()) {
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+        }
+
+        var userSaved = itsSaved.get();
+
+        userSaved.setActive(!userSaved.isActive());
+
+        var result = this.userRepository.save(userSaved);
+
+        return userMapper.toDto(result);
     }
 
 
