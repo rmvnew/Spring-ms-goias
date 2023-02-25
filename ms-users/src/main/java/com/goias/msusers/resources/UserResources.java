@@ -4,6 +4,8 @@ import com.goias.msusers.resources.dto.request.UserRequestDto;
 import com.goias.msusers.resources.dto.response.UserResponseDto;
 import com.goias.msusers.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +24,11 @@ public class UserResources {
     @PostMapping
     public ResponseEntity<UserResponseDto> createUser(@RequestBody UserRequestDto user){
         return ResponseEntity.ok(this.userService.save(user));
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<UserResponseDto>> getAll(Pageable page){
+       return ResponseEntity.ok(this.userService.getAll(page));
     }
 
 }

@@ -9,7 +9,12 @@ import com.goias.msusers.resources.dto.response.UserResponseDto;
 import com.goias.msusers.service.UserService;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -37,5 +42,11 @@ public class UserServiceImpl implements UserService {
         var saved = this.userRepository.save(user);
 
         return userMapper.toDto(saved);
+    }
+
+    @Override
+    public Page<UserResponseDto> getAll(Pageable page) {
+        return this.userRepository.findAll(page).map(userMapper::toDto);
+
     }
 }

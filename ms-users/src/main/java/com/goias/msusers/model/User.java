@@ -1,7 +1,10 @@
 package com.goias.msusers.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.io.Serializable;
 
 
 @Getter
@@ -10,7 +13,9 @@ import lombok.*;
 @ToString
 @Entity
 @Table(name = "TB_USER")
-public class User {
+public class User implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,8 +31,9 @@ public class User {
     @Column(name = "user_password")
     private String userPassword;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "profileId")
+//    @JsonBackReference
     private Profile profile;
 
     public User(String userName, String userEmail, String userPassword, Profile profile) {
