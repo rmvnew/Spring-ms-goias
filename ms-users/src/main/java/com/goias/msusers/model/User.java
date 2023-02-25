@@ -1,8 +1,10 @@
 package com.goias.msusers.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.io.Serializable;
 
@@ -33,7 +35,6 @@ public class User implements Serializable {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "profileId")
-//    @JsonBackReference
     private Profile profile;
 
     public User(String userName, String userEmail, String userPassword, Profile profile) {

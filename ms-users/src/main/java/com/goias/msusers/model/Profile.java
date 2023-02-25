@@ -1,7 +1,6 @@
 package com.goias.msusers.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,7 +27,6 @@ public class Profile implements Serializable {
     private String profileName;
 
     @OneToMany(mappedBy = "profile",fetch = FetchType.LAZY)
-//
     @JsonIgnore
     private List<User> users;
 
