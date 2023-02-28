@@ -9,12 +9,17 @@ import com.goias.msusers.resources.dto.mapper.UserMapper;
 import com.goias.msusers.resources.dto.request.UserCreateRequestDto;
 import com.goias.msusers.resources.dto.request.UserUpdateRequestDto;
 import com.goias.msusers.resources.dto.response.UserResponseDto;
+import com.goias.msusers.schedule.updateCode;
+import com.goias.msusers.service.MailService;
 import com.goias.msusers.service.UserService;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.Timer;
+import java.util.UUID;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -27,6 +32,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private MailService mailService;
 
     @Override
     public UserResponseDto save(UserCreateRequestDto requestDto) {
@@ -98,6 +106,38 @@ public class UserServiceImpl implements UserService {
 
         return userMapper.toDto(result);
     }
+
+    @Override
+    public boolean recoverPassword(String email) {
+
+        var status = true;
+
+        var code = UUID.randomUUID().toString();
+
+        var user = this.userRepository.findByUserEmail(email)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        user.setRecoverCode(code);
+
+        userRepository.save(user);
+
+        try{
+            mailService.sendEmail(email,"Code to recover password","Seu código: "+code);
+        }catch (Exception ex){
+            status = false;
+            ex.getMessage();
+        }
+
+        Timer timer = new Timer();
+        long delay = 5*60*1000; // 5 minutos em milissegundos
+        updateCode task = new updateCode(email, userRepository);
+        timer.schedule(task, delay);
+
+        return status;
+    }
+
+
+
 
 
 }

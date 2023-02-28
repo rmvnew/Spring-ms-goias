@@ -33,6 +33,9 @@ public class User implements Serializable {
     @Column(name = "user_password")
     private String userPassword;
 
+    @Column(name = "user_recover_code",nullable = true)
+    private String recoverCode;
+
     @Column(name = "is_active")
     private boolean isActive;
 
