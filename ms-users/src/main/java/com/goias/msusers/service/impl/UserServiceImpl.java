@@ -18,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Random;
 import java.util.Timer;
 import java.util.UUID;
 
@@ -108,11 +109,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean recoverPassword(String email) {
+    public void recoverCode(String email) {
 
-        var status = true;
+        Random random = new Random();
 
-        var code = UUID.randomUUID().toString();
+        int ramdomNumber = random.nextInt(900000)+100000;
+
+        var code = Integer.toString(ramdomNumber);
 
         var user = this.userRepository.findByUserEmail(email)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
@@ -124,7 +127,6 @@ public class UserServiceImpl implements UserService {
         try{
             mailService.sendEmail(email,"Code to recover password","Seu código: "+code);
         }catch (Exception ex){
-            status = false;
             ex.getMessage();
         }
 
@@ -133,11 +135,23 @@ public class UserServiceImpl implements UserService {
         updateCode task = new updateCode(email, userRepository);
         timer.schedule(task, delay);
 
-        return status;
+
     }
 
+    @Override
+    public void recoverPass(String email, String code, String pass) {
 
+      var user = this.userRepository.findByUserEmailAndRecoverCode(email,code)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
+      var newPassHash = BCrypt.hashpw(pass, BCrypt.gensalt(8));
+
+      user.setUserPassword(newPassHash);
+      user.setRecoverCode("");
+
+      this.userRepository.save(user);
+
+    }
 
 
 }

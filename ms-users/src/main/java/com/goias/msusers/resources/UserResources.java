@@ -1,5 +1,6 @@
 package com.goias.msusers.resources;
 
+import com.goias.msusers.resources.dto.request.RecoverPassRequestDto;
 import com.goias.msusers.resources.dto.request.UserCreateRequestDto;
 import com.goias.msusers.resources.dto.request.UserUpdateRequestDto;
 import com.goias.msusers.resources.dto.response.UserResponseDto;
@@ -52,13 +53,14 @@ public class UserResources {
         return ResponseEntity.ok(this.userService.changeStatus(id));
     }
 
-//    @PostMapping("/send-email")
-//    public void sendEmail(@RequestParam String to, @RequestParam String subject, @RequestParam String text) {
-//        mailService.sendEmail(to, subject, text);
-//    }
+
+    @PostMapping("/recover-code")
+    public void recoverCode(@RequestParam String email) {
+        this.userService.recoverCode(email);
+    }
 
     @PostMapping("/recover-pass")
-    public boolean sendEmail(@RequestParam String email) {
-        return this.userService.recoverPassword(email);
+    public void recoverPas(@ModelAttribute("recover") RecoverPassRequestDto recover) {
+        this.userService.recoverPass(recover.getEmail(), recover.getCode(), recover.getPass());
     }
 }

@@ -1,6 +1,5 @@
 package com.goias.msusers.service;
 
-import com.goias.msusers.model.User;
 import com.goias.msusers.resources.dto.request.UserCreateRequestDto;
 import com.goias.msusers.resources.dto.request.UserUpdateRequestDto;
 import com.goias.msusers.resources.dto.response.UserResponseDto;
@@ -19,9 +18,9 @@ public interface UserService {
 
     UserResponseDto changeStatus(Long id);
 
+    void recoverCode(String email);
 
-    boolean recoverPassword(String email);
-
+    void recoverPass(String email,String code,String pass);
 
 
 }
