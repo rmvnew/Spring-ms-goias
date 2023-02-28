@@ -17,6 +17,9 @@ public class UserResources {
     @Autowired
     private UserService userService;
 
+//    @Autowired
+//    private MailService mailService;
+
     @GetMapping(value = "/hello")
     public String hello() {
         return "Hello World!";
@@ -45,7 +48,17 @@ public class UserResources {
     }
 
     @PatchMapping("/change-status/{id}")
-    public ResponseEntity<UserResponseDto> changeStatus(@PathVariable("id") Long id){
+    public ResponseEntity<UserResponseDto> changeStatus(@PathVariable("id") Long id) {
         return ResponseEntity.ok(this.userService.changeStatus(id));
+    }
+
+//    @PostMapping("/send-email")
+//    public void sendEmail(@RequestParam String to, @RequestParam String subject, @RequestParam String text) {
+//        mailService.sendEmail(to, subject, text);
+//    }
+
+    @PostMapping("/recover-pass")
+    public boolean sendEmail(@RequestParam String email) {
+        return this.userService.recoverPassword(email);
     }
 }
