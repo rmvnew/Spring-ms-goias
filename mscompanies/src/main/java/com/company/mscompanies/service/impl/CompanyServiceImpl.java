@@ -25,6 +25,12 @@ public class CompanyServiceImpl implements CompanyService {
             throw new CustomException(ErrorCode.INVALID_CNPJ);
         }
 
+        var saved = this.companyRepository.findByCompanyCnpj(requestDto.getCompanyCnpj());
+
+        if(saved.isPresent()){
+            throw  new CustomException(ErrorCode.COMPANY_ALREADY_REGISTERED);
+        }
+
         var company = new Company(
                 requestDto.getCompanyName(),
                 requestDto.getCompanyCnpj(),
@@ -35,5 +41,7 @@ public class CompanyServiceImpl implements CompanyService {
 
         return this.companyRepository.save(company);
     }
+
+
 
 }

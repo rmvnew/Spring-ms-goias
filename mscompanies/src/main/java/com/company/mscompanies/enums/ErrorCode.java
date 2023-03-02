@@ -7,7 +7,8 @@ public enum ErrorCode {
     USER_NOT_FOUND(100, "Usuário não encontrado",HttpStatus.NOT_FOUND),
     USER_ALREADY_REGISTERED(101, "Usuário já cadastrado!",HttpStatus.BAD_REQUEST),
     EMAIL_ALREADY_REGISTERED(102, "E-mail já cadastrado",HttpStatus.BAD_REQUEST),
-    INVALID_CNPJ(201, "Cnpj informado é inválido!",HttpStatus.BAD_REQUEST);
+    INVALID_CNPJ(200, "Cnpj informado é inválido!",HttpStatus.BAD_REQUEST),
+    COMPANY_ALREADY_REGISTERED(201, "Empresa já cadastrada!",HttpStatus.BAD_REQUEST);
 
     private final int code;
     private final String mesage;

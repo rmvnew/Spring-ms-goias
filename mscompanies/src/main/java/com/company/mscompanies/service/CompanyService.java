@@ -7,4 +7,6 @@ public interface CompanyService {
 
     Company save(CompanyRequestDto requestDto);
 
+
+
 }
