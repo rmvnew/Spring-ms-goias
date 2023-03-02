@@ -6,7 +6,8 @@ public enum ErrorCode {
 
     USER_NOT_FOUND(100, "Usuário não encontrado",HttpStatus.NOT_FOUND),
     USER_ALREADY_REGISTERED(101, "Usuário já cadastrado!",HttpStatus.BAD_REQUEST),
-    EMAIL_ALREADY_REGISTERED(102, "E-mail já cadastrado",HttpStatus.BAD_REQUEST);
+    EMAIL_ALREADY_REGISTERED(102, "E-mail já cadastrado",HttpStatus.BAD_REQUEST),
+    EMAIL_OR_CODE_NOT_FOUND(200, "E-mail ou código não encontrado!",HttpStatus.NOT_FOUND);
 
     private final int code;
     private final String mesage;

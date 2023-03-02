@@ -22,9 +22,6 @@ public class Company {
     @Column(name = "company_id")
     private Long companyId;
 
-    @NotBlank(message = "O nome da empresa não pode estar em branco")
-    @Pattern(regexp = "^(?!\\s{2,})[a-zA-Z]+(\\s[a-zA-Z]+)*$",
-            message = "O nome da empresa não pode conter dois ou mais espaços em branco consecutivos, números ou caracteres especiais")
     @Column(name = "company_name")
     private String companyName;
 

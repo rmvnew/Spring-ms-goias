@@ -142,7 +142,7 @@ public class UserServiceImpl implements UserService {
     public void recoverPass(String email, String code, String pass) {
 
       var user = this.userRepository.findByUserEmailAndRecoverCode(email,code)
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.EMAIL_OR_CODE_NOT_FOUND));
 
       var newPassHash = BCrypt.hashpw(pass, BCrypt.gensalt(8));
 
