@@ -10,7 +10,6 @@ import java.sql.Timestamp;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @ToString
 @EqualsAndHashCode(of = "product_name")
 @Entity(name = "Company")
@@ -40,4 +39,15 @@ public class Company {
     @Column(name = "update_at")
     private Timestamp updateAt;
 
+    public Company() {
+    }
+
+    public Company(String companyName, String companyCnpj, BigDecimal companyPayment, boolean isActive, Timestamp createAt, Timestamp updateAt) {
+        this.companyName = companyName;
+        this.companyCnpj = companyCnpj;
+        this.companyPayment = companyPayment;
+        this.isActive = isActive;
+        this.createAt = createAt;
+        this.updateAt = updateAt;
+    }
 }

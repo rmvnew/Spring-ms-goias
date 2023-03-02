@@ -20,6 +20,7 @@ public class MscoudgatewayApplication {
 		return builder
 				.routes()
 				.route(r -> r.path("/users/**").uri("lb://msusers"))
+				.route(r -> r.path("/companies/**").uri("lb://mscompanies"))
 				.build();
 	}
 
