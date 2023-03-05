@@ -1,5 +1,6 @@
-package com.company.mscompanies.resource.dto;
+package com.company.mscompanies.resource.dto.response;
 
+import com.company.mscompanies.model.Contract;
 import jakarta.persistence.Column;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,6 +17,6 @@ public class CompanyResponseDto {
 
     private String companyCnpj;
 
-    private BigDecimal companyPayment;
+    private Contract contract;
 
 }

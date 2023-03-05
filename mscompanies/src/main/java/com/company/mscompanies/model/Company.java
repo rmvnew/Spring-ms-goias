@@ -1,9 +1,10 @@
 package com.company.mscompanies.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -27,9 +28,6 @@ public class Company {
     @Column(name = "company_cnpj")
     private String companyCnpj;
 
-    @Column(name = "company_payment")
-    private BigDecimal companyPayment;
-
     @Column(name = "is_active")
     private boolean isActive;
 
@@ -39,15 +37,23 @@ public class Company {
     @Column(name = "update_at")
     private Timestamp updateAt;
 
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @JoinColumn(name = "contract_id", referencedColumnName = "contract_id")
+    private Contract contract;
+
     public Company() {
     }
 
-    public Company(String companyName, String companyCnpj, BigDecimal companyPayment, boolean isActive, Timestamp createAt, Timestamp updateAt) {
+    public Company(String companyName, String companyCnpj,Contract contract,
+                   boolean isActive, Timestamp createAt,
+                   Timestamp updateAt) {
+
         this.companyName = companyName;
         this.companyCnpj = companyCnpj;
-        this.companyPayment = companyPayment;
+        this.contract = contract;
         this.isActive = isActive;
         this.createAt = createAt;
         this.updateAt = updateAt;
+
     }
 }

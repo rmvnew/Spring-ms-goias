@@ -1,5 +1,6 @@
 package com.company.mscompanies.resource.dto;
 
+import com.company.mscompanies.resource.dto.request.CompanyRequestDto;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
