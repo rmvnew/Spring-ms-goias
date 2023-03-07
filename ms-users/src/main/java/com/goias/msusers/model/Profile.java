@@ -26,8 +26,6 @@ public class Profile implements Serializable {
     @Column(name = "profile_name")
     private String profileName;
 
-    @OneToMany(mappedBy = "profile",fetch = FetchType.LAZY)
-    @JsonIgnore
-    private List<User> users;
+
 
 }

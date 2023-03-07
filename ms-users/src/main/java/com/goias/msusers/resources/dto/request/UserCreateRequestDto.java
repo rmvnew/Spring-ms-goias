@@ -7,6 +7,8 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Set;
+
 @Getter
 @Setter
 public class UserCreateRequestDto {
@@ -22,6 +24,6 @@ public class UserCreateRequestDto {
     private String userPassword;
 
     @NotEmpty
-    private Long profileId;
+    private Set<Long> profileId;
 
 }

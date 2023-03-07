@@ -7,6 +7,8 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Getter
@@ -39,15 +41,19 @@ public class User implements Serializable {
     @Column(name = "is_active")
     private boolean isActive;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "profileId")
-    private Profile profile;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "tb_user_profile",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "profile_id")
+    )
+    private Set<Profile> profiles;
 
-    public User(String userName, String userEmail, String userPassword, Profile profile,boolean isActive) {
+    public User(String userName, String userEmail, String userPassword, Set<Profile> profiles,boolean isActive) {
         this.userName = userName;
         this.userEmail = userEmail;
         this.userPassword = userPassword;
-        this.profile = profile;
+        this.profiles = profiles;
         this.isActive = isActive;
     }
+
 }

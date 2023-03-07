@@ -4,6 +4,9 @@ import com.goias.msusers.model.Profile;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+import java.util.Set;
+
 @Getter
 @Setter
 public class UserResponseDto {
@@ -15,5 +18,5 @@ public class UserResponseDto {
 
     private boolean isActive;
 
-    private Profile profile;
+    private Set<Profile> profiles;
 }

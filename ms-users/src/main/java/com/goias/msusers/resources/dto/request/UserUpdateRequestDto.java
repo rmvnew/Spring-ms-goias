@@ -7,6 +7,8 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Set;
+
 @Getter
 @Setter
 public class UserUpdateRequestDto {
@@ -18,6 +20,6 @@ public class UserUpdateRequestDto {
     private String userEmail;
 
     @NotEmpty
-    private Long profileId;
+    private Set<Long> profileId;
 
 }

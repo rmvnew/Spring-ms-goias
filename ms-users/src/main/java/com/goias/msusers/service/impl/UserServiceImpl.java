@@ -2,6 +2,7 @@ package com.goias.msusers.service.impl;
 
 import com.goias.msusers.enums.ErrorCode;
 import com.goias.msusers.exceptions.CustomException;
+import com.goias.msusers.model.Profile;
 import com.goias.msusers.model.User;
 import com.goias.msusers.repository.ProfileRepository;
 import com.goias.msusers.repository.UserRepository;
@@ -18,9 +19,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Random;
-import java.util.Timer;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -40,17 +39,25 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDto save(UserCreateRequestDto requestDto) {
 
+        Set<Profile> profiles = new HashSet<>();
         var currentPass = BCrypt.hashpw(requestDto.getUserPassword(), BCrypt.gensalt(8));
-        var profile = this.profileRepository.findById(requestDto.getProfileId()).get();
+
+        requestDto.getProfileId().forEach(data -> {
+            var profile = this.profileRepository.findById(data).get();
+            profiles.add(profile);
+
+        });
+
         var isRegistered = this.userRepository.findByUserName(requestDto.getUserName().toUpperCase());
         if (isRegistered.isPresent()) {
             throw new CustomException(ErrorCode.USER_ALREADY_REGISTERED);
         }
 
+
         User user = new User(
                 requestDto.getUserName().trim().toUpperCase(),
                 requestDto.getUserEmail(),
-                currentPass, profile,
+                currentPass, profiles,
                 true);
 
         var saved = this.userRepository.save(user);
@@ -73,17 +80,23 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDto updateUser(UserUpdateRequestDto requestDto, Long id) {
 
+        Set<Profile> profiles = new HashSet<>();
         var itsSaved = this.userRepository.findById(id);
-        var profile = this.profileRepository.findById(requestDto.getProfileId()).get();
 
         if (itsSaved.isEmpty()) {
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
         }
 
+        requestDto.getProfileId().forEach(data -> {
+            var profile = this.profileRepository.findById(data).get();
+            profiles.add(profile);
+
+        });
+
         var userSaved = itsSaved.get();
         userSaved.setUserName(requestDto.getUserName());
         userSaved.setUserEmail(requestDto.getUserEmail());
-        userSaved.setProfile(profile);
+        userSaved.setProfiles(profiles);
 
         var saveDone = this.userRepository.save(userSaved);
 
@@ -113,7 +126,7 @@ public class UserServiceImpl implements UserService {
 
         Random random = new Random();
 
-        int ramdomNumber = random.nextInt(900000)+100000;
+        int ramdomNumber = random.nextInt(900000) + 100000;
 
         var code = Integer.toString(ramdomNumber);
 
@@ -124,14 +137,14 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(user);
 
-        try{
-            mailService.sendEmail(email,"Code to recover password","Seu código: "+code);
-        }catch (Exception ex){
+        try {
+            mailService.sendEmail(email, "Code to recover password", "Seu código: " + code);
+        } catch (Exception ex) {
             ex.getMessage();
         }
 
         Timer timer = new Timer();
-        long delay = 5*60*1000; // 5 minutos em milissegundos
+        long delay = 5 * 60 * 1000; // 5 minutos em milissegundos
         updateCode task = new updateCode(email, userRepository);
         timer.schedule(task, delay);
 
@@ -141,15 +154,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public void recoverPass(String email, String code, String pass) {
 
-      var user = this.userRepository.findByUserEmailAndRecoverCode(email,code)
+        var user = this.userRepository.findByUserEmailAndRecoverCode(email, code)
                 .orElseThrow(() -> new CustomException(ErrorCode.EMAIL_OR_CODE_NOT_FOUND));
 
-      var newPassHash = BCrypt.hashpw(pass, BCrypt.gensalt(8));
+        var newPassHash = BCrypt.hashpw(pass, BCrypt.gensalt(8));
 
-      user.setUserPassword(newPassHash);
-      user.setRecoverCode("");
+        user.setUserPassword(newPassHash);
+        user.setRecoverCode("");
 
-      this.userRepository.save(user);
+        this.userRepository.save(user);
 
     }
 
