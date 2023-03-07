@@ -1,5 +1,6 @@
 package com.goias.msusers.resources;
 
+import com.goias.msusers.model.User;
 import com.goias.msusers.resources.dto.request.RecoverPassRequestDto;
 import com.goias.msusers.resources.dto.request.UserCreateRequestDto;
 import com.goias.msusers.resources.dto.request.UserUpdateRequestDto;
@@ -39,6 +40,11 @@ public class UserResources {
     @GetMapping(value = "/{id}")
     public ResponseEntity<UserResponseDto> findById(@PathVariable("id") Long id) {
         return ResponseEntity.ok(this.userService.findById(id));
+    }
+
+    @GetMapping(value = "/email",params = "email")
+    public ResponseEntity<User> findByUserEmail(@RequestParam("email") String email) {
+        return ResponseEntity.ok(this.userService.findByUserEmail(email));
     }
 
     @PutMapping("/{id}")

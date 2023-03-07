@@ -1,10 +1,13 @@
 package com.goias.msusers.service;
 
+import com.goias.msusers.model.User;
 import com.goias.msusers.resources.dto.request.UserCreateRequestDto;
 import com.goias.msusers.resources.dto.request.UserUpdateRequestDto;
 import com.goias.msusers.resources.dto.response.UserResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
+import java.util.Optional;
 
 public interface UserService {
 
@@ -21,6 +24,8 @@ public interface UserService {
     void recoverCode(String email);
 
     void recoverPass(String email,String code,String pass);
+
+    User findByUserEmail(String email);
 
 
 }

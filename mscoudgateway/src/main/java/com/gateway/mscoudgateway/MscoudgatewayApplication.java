@@ -21,6 +21,7 @@ public class MscoudgatewayApplication {
 				.routes()
 				.route(r -> r.path("/users/**").uri("lb://msusers"))
 				.route(r -> r.path("/companies/**").uri("lb://mscompanies"))
+				.route(r -> r.path("/oauth/**").uri("lb://msoauth"))
 				.build();
 	}
 
